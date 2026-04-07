@@ -319,10 +319,10 @@
     <div class="shell">
       <section class="hero">
         <div class="hero-inner">
-          <div class="eyebrow">Mediapool</div>
+          <div class="eyebrow">MEDIAPOOL</div>
           <div>
             <h1>Masterclass 2026</h1>
-            <p class="sub">Open de YouTube-video of download hem hieronder. </p>
+            <p class="sub">Open direct de YouTube-video of download hem.</p>
           </div>
 
           <div class="toolbar">
@@ -330,7 +330,7 @@
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0a7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
-              <input id="searchInput" type="search" placeholder="Zoek op titel, bijvoorbeeld 'finale' of 'afro'..." autocomplete="off" />
+              <input id="searchInput" type="search" placeholder="Zoek" autocomplete="off" />
             </label>
             <div class="count"><span id="visibleCount">0</span> video's</div>
           </div>
@@ -541,10 +541,11 @@
             <div class="thumb-wrap">
               <img
                 class="thumb"
-                src="https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg"
+                src="https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg"
                 alt="${escapeHtml(video.title)}"
                 loading="lazy"
-                onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg';}"
+                referrerpolicy="no-referrer"
+                onerror="if(!this.dataset.fallback1){this.dataset.fallback1='1';this.src='https://i.ytimg.com/vi/${video.youtubeId}/mqdefault.jpg';}else if(!this.dataset.fallback2){this.dataset.fallback2='1';this.src='https://i.ytimg.com/vi/${video.youtubeId}/default.jpg';}else{this.style.display='none';this.parentElement.style.background='#111';}"
               />
               <div class="badge">${index + 1}</div>
             </div>
