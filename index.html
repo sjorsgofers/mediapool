@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>MASTERCLASS 2026 – Video App</title>
+  <meta name="theme-color" content="#0b0b0b" />
+  <style>
+    :root {
+      --bg: #0b0b0b;
+      --card: #141414;
+      --card-2: #181818;
+      --text: #ffffff;
+      --muted: #b7b7b7;
+      --gold: #c8a45b;
+      --gold-soft: rgba(200,164,91,.18);
+      --gold-line: rgba(200,164,91,.38);
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius-xl: 26px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --maxw: 1440px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at top, rgba(200,164,91,.10), transparent 28%),
+        linear-gradient(180deg, #111 0%, var(--bg) 22%, #090909 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100%;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .app {
+      width: 100%;
+      min-height: 100dvh;
+      padding: clamp(16px, 2vw, 28px);
+    }
+
+    .shell {
+      max-width: var(--maxw);
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      margin-bottom: 24px;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(180deg, rgba(11,11,11,.94), rgba(11,11,11,.78));
+      border: 1px solid var(--gold-line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      padding: clamp(18px, 3vw, 30px);
+      display: grid;
+      gap: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--gold-line);
+      background: var(--gold-soft);
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 54px);
+      line-height: 1.02;
+      letter-spacing: -.03em;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(14px, 2vw, 18px);
+      max-width: 900px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      padding: 14px 18px;
+      min-height: 56px;
+    }
+
+    .search svg {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 20px;
+      opacity: .75;
+    }
+
+    .search input {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      width: 100%;
+      color: white;
+      font-size: 16px;
+    }
+
+    .search input::placeholder { color: #9f9f9f; }
+
+    .count {
+      min-width: 130px;
+      text-align: center;
+      padding: 14px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.05);
+      font-weight: 700;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%);
+      border: 1px solid var(--gold-line);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      min-width: 0;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(200,164,91,.6);
+      box-shadow: 0 18px 44px rgba(0,0,0,.45);
+    }
+
+    .thumb-wrap {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: #090909;
+      overflow: hidden;
+    }
+
+    .thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #090909;
+    }
+
+    .badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(11,11,11,.85);
+      border: 1px solid rgba(255,255,255,.12);
+      color: white;
+      font-weight: 700;
+      font-size: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .content {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.3;
+      letter-spacing: -.01em;
+      word-break: break-word;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      text-align: center;
+      border: 1px solid transparent;
+      transition: transform .18s ease, opacity .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-watch {
+      background: var(--gold);
+      color: #111;
+    }
+
+    .btn-download {
+      background: rgba(255,255,255,.06);
+      color: white;
+      border-color: rgba(255,255,255,.1);
+    }
+
+    .btn-disabled {
+      background: rgba(255,255,255,.04);
+      color: #8f8f8f;
+      border-color: rgba(255,255,255,.08);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .empty {
+      display: none;
+      margin-top: 20px;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid var(--gold-line);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      color: #9f9f9f;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (min-width: 680px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1380px) {
+      .grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+      .count {
+        width: 100%;
+      }
+      .actions {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="shell">
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="eyebrow">MASTERCLASS 2026</div>
+          <div>
+            <h1>Bekijk en download alle optredens</h1>
+            <p class="sub">Zoek snel op titel en open direct de YouTube-video of download de opname via Google Drive. De app werkt responsief op mobiel, iPad en pc.</p>
+          </div>
+
+          <div class="toolbar">
+            <label class="search" aria-label="Zoeken door video's">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0a7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <input id="searchInput" type="search" placeholder="Zoek op titel, bijvoorbeeld 'finale' of 'afro'..." autocomplete="off" />
+            </label>
+            <div class="count"><span id="visibleCount">0</span> video's</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="videoGrid" class="grid" aria-live="polite"></section>
+      <div id="emptyState" class="empty">Geen video's gevonden voor deze zoekopdracht.</div>
+      <div class="footer-note">Tip: zet deze pagina op volledig scherm of voeg haar toe aan je beginscherm voor een app-achtig gevoel.</div>
+    </div>
+  </main>
+
+  <script>
+    const videos = [
+  {
+    "youtube": "https://youtu.be/xvFwD8x7t90",
+    "title": "MASTERCLASS 2026 - VOLLEDIGE SHOW",
+    "drive": null,
+    "youtubeId": "xvFwD8x7t90",
+    "download": null
+  },
+  {
+    "youtube": "https://youtu.be/2vaY_YF-nUE",
+    "title": "Opening - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1mbYRJGUUXMZn4z1iwNoeE4eQ7Xx2wCJc/view?usp=drive_link",
+    "youtubeId": "2vaY_YF-nUE",
+    "download": "https://drive.google.com/uc?export=download&id=1mbYRJGUUXMZn4z1iwNoeE4eQ7Xx2wCJc"
+  },
+  {
+    "youtube": "https://youtu.be/tApQ41BBZNY",
+    "title": "Afro Advanced - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1vkqfkD0HgN3pdjH-7SdZU7zvm910dsvM/view?usp=drive_link",
+    "youtubeId": "tApQ41BBZNY",
+    "download": "https://drive.google.com/uc?export=download&id=1vkqfkD0HgN3pdjH-7SdZU7zvm910dsvM"
+  },
+  {
+    "youtube": "https://youtu.be/nT26wy4kHXE",
+    "title": "Modern Advanced 1 - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1ZNYj6GRi18uJu-rlXchPgIVztKXcDuDY/view?usp=drive_link",
+    "youtubeId": "nT26wy4kHXE",
+    "download": "https://drive.google.com/uc?export=download&id=1ZNYj6GRi18uJu-rlXchPgIVztKXcDuDY"
+  },
+  {
+    "youtube": "https://youtu.be/jYShVdJPYj8",
+    "title": "Commercial 1 - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1F4TBlv6tNy_Y0Q61EjTa6XMCYIgnkGbm/view?usp=drive_link",
+    "youtubeId": "jYShVdJPYj8",
+    "download": "https://drive.google.com/uc?export=download&id=1F4TBlv6tNy_Y0Q61EjTa6XMCYIgnkGbm"
+  },
+  {
+    "youtube": "https://youtu.be/cJB3nezX1Gc",
+    "title": "Myrthe & Job - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1G7SBTd7D84iHRbJkLy0IMog-p7McVsAV/view?usp=drive_link",
+    "youtubeId": "cJB3nezX1Gc",
+    "download": "https://drive.google.com/uc?export=download&id=1G7SBTd7D84iHRbJkLy0IMog-p7McVsAV"
+  },
+  {
+    "youtube": "https://youtu.be/iH-25CHwC04",
+    "title": "Modern Masterclass 1 - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1XUs9fEiqK1h-pR_BMQFoOlUvOJcRMbUz/view?usp=drive_link",
+    "youtubeId": "iH-25CHwC04",
+    "download": "https://drive.google.com/uc?export=download&id=1XUs9fEiqK1h-pR_BMQFoOlUvOJcRMbUz"
+  },
+  {
+    "youtube": "https://youtu.be/-95FFUYRoG0",
+    "title": "Hiphop Masterclass - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1VHZsjjkjdg7eJ7RUpNifAAArJ9f4LVmR/view?usp=drive_link",
+    "youtubeId": "-95FFUYRoG0",
+    "download": "https://drive.google.com/uc?export=download&id=1VHZsjjkjdg7eJ7RUpNifAAArJ9f4LVmR"
+  },
+  {
+    "youtube": "https://youtu.be/9yicr3kqfEE",
+    "title": "Tjasso - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1hzTsLnLZFrxz71p0BzOlfTQKs8TFvlZh/view?usp=drive_link",
+    "youtubeId": "9yicr3kqfEE",
+    "download": "https://drive.google.com/uc?export=download&id=1hzTsLnLZFrxz71p0BzOlfTQKs8TFvlZh"
+  },
+  {
+    "youtube": "https://youtu.be/lYj29Dny3aE",
+    "title": "The Ultimate 1 - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1FoJVt2ZpmQSOETJpyYNRLJE0Yx4NVEhe/view?usp=drive_link",
+    "youtubeId": "lYj29Dny3aE",
+    "download": "https://drive.google.com/uc?export=download&id=1FoJVt2ZpmQSOETJpyYNRLJE0Yx4NVEhe"
+  },
+  {
+    "youtube": "https://youtu.be/yd9ULVsVjdw",
+    "title": "Hoop - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1a58h8szCNv_Yf6HbjALQXKIj27Dnsta9/view?usp=drive_link",
+    "youtubeId": "yd9ULVsVjdw",
+    "download": "https://drive.google.com/uc?export=download&id=1a58h8szCNv_Yf6HbjALQXKIj27Dnsta9"
+  },
+  {
+    "youtube": "https://youtu.be/cDGRN4JwPz0",
+    "title": "Commercial 2 - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1uNwZkKkgkyhFfDpVYkitzGIUZLR76CJ0/view?usp=drive_link",
+    "youtubeId": "cDGRN4JwPz0",
+    "download": "https://drive.google.com/uc?export=download&id=1uNwZkKkgkyhFfDpVYkitzGIUZLR76CJ0"
+  },
+  {
+    "youtube": "https://youtu.be/ePaIPf4x4i8",
+    "title": "Soldaat - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1JlaFmPDpPncj4EC97_wz1r4odB1L8NpN/view?usp=drive_link",
+    "youtubeId": "ePaIPf4x4i8",
+    "download": "https://drive.google.com/uc?export=download&id=1JlaFmPDpPncj4EC97_wz1r4odB1L8NpN"
+  },
+  {
+    "youtube": "https://youtu.be/Ra4jkUSs3uI",
+    "title": "Tjasso & Louis - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1o1WN74HlDMqg3BlWr_9fZPX1D1hfpO2i/view?usp=drive_link",
+    "youtubeId": "Ra4jkUSs3uI",
+    "download": "https://drive.google.com/uc?export=download&id=1o1WN74HlDMqg3BlWr_9fZPX1D1hfpO2i"
+  },
+  {
+    "youtube": "https://youtu.be/Eg2O4XV9SDo",
+    "title": "Hiphop Advanced - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1chTFgF17MfwxFnCP2HZL77l2aPDu6Kcy/view?usp=drive_link",
+    "youtubeId": "Eg2O4XV9SDo",
+    "download": "https://drive.google.com/uc?export=download&id=1chTFgF17MfwxFnCP2HZL77l2aPDu6Kcy"
+  },
+  {
+    "youtube": "https://youtu.be/_AuKpkUHQM8",
+    "title": "Papaoutai - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1FPfktc9XNxQKubkyXYgG26w5hyALdnSu/view?usp=drive_link",
+    "youtubeId": "_AuKpkUHQM8",
+    "download": "https://drive.google.com/uc?export=download&id=1FPfktc9XNxQKubkyXYgG26w5hyALdnSu"
+  },
+  {
+    "youtube": "https://youtu.be/u2Zcmmp6zbE",
+    "title": "Voor mama - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1l9q_oeql-yCfgVob4hTsi_qIyyKCctnr/view?usp=drive_link",
+    "youtubeId": "u2Zcmmp6zbE",
+    "download": "https://drive.google.com/uc?export=download&id=1l9q_oeql-yCfgVob4hTsi_qIyyKCctnr"
+  },
+  {
+    "youtube": "https://youtu.be/GoRGsIgU7Qc",
+    "title": "Modern Advanced 2 - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/14ER_d_Sz5iC8QL2gLsyJ0d9-FKhddcme/view?usp=sharing",
+    "youtubeId": "GoRGsIgU7Qc",
+    "download": "https://drive.google.com/uc?export=download&id=14ER_d_Sz5iC8QL2gLsyJ0d9-FKhddcme"
+  },
+  {
+    "youtube": "https://youtu.be/5hSJWPCIUNY",
+    "title": "The Ultimate 2 - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/11cQ5hcIKQgHmoDr8QdGh0Fo7uS29BxS_/view?usp=drive_link",
+    "youtubeId": "5hSJWPCIUNY",
+    "download": "https://drive.google.com/uc?export=download&id=11cQ5hcIKQgHmoDr8QdGh0Fo7uS29BxS_"
+  },
+  {
+    "youtube": "https://youtu.be/_gsVSG_66q4",
+    "title": "Happy - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1UgZRWsbOw1riW6rxMVvg_Yik4AQYLUSV/view?usp=drive_link",
+    "youtubeId": "_gsVSG_66q4",
+    "download": "https://drive.google.com/uc?export=download&id=1UgZRWsbOw1riW6rxMVvg_Yik4AQYLUSV"
+  },
+  {
+    "youtube": "https://youtu.be/V78rDsal6wo",
+    "title": "Louis - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1yMef2ZDdj7HjBM2i1SEIxkimGMu1jrZo/view?usp=drive_link",
+    "youtubeId": "V78rDsal6wo",
+    "download": "https://drive.google.com/uc?export=download&id=1yMef2ZDdj7HjBM2i1SEIxkimGMu1jrZo"
+  },
+  {
+    "youtube": "https://youtu.be/n3yKUdU6TJw",
+    "title": "Docentendans - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/131b8YQCRAzzBa2decd1ICYuOazInOi6P/view?usp=drive_link",
+    "youtubeId": "n3yKUdU6TJw",
+    "download": "https://drive.google.com/uc?export=download&id=131b8YQCRAzzBa2decd1ICYuOazInOi6P"
+  },
+  {
+    "youtube": "https://youtu.be/roLPlb0Bq_k",
+    "title": "The Spirit of Africa / AFRO ADVANCED - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/15Fhd8ECphIvklSQ0MS0K4MbX8ZR6M918/view?usp=drive_link",
+    "youtubeId": "roLPlb0Bq_k",
+    "download": "https://drive.google.com/uc?export=download&id=15Fhd8ECphIvklSQ0MS0K4MbX8ZR6M918"
+  },
+  {
+    "youtube": "https://youtu.be/g7xyYU-J0BM",
+    "title": "Lichtje branden - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1QR98FkhK1Ipcc6tmWtqCWMUxjDAleAr-/view?usp=drive_link",
+    "youtubeId": "g7xyYU-J0BM",
+    "download": "https://drive.google.com/uc?export=download&id=1QR98FkhK1Ipcc6tmWtqCWMUxjDAleAr-"
+  },
+  {
+    "youtube": "https://youtu.be/h9ZZiZlFM8Q",
+    "title": "Finale - MASTERCLASS 2026",
+    "drive": "https://drive.google.com/file/d/1P7mzK7Y0z7To0K0WBi4mgNovVkjjy-EK/view?usp=drive_link",
+    "youtubeId": "h9ZZiZlFM8Q",
+    "download": "https://drive.google.com/uc?export=download&id=1P7mzK7Y0z7To0K0WBi4mgNovVkjjy-EK"
+  }
+];
+
+    const grid = document.getElementById('videoGrid');
+    const searchInput = document.getElementById('searchInput');
+    const visibleCount = document.getElementById('visibleCount');
+    const emptyState = document.getElementById('emptyState');
+
+    function render(filter = '') {
+      const q = filter.trim().toLowerCase();
+      const filtered = videos.filter(video => video.title.toLowerCase().includes(q));
+
+      grid.innerHTML = filtered.map((video, index) => {
+        const downloadButton = video.download
+          ? `<a class="btn btn-download" href="${video.download}" target="_blank" rel="noopener noreferrer" download>Downloaden</a>`
+          : `<span class="btn btn-disabled" aria-disabled="true">Geen download</span>`;
+
+        return `
+          <article class="card">
+            <div class="thumb-wrap">
+              <img
+                class="thumb"
+                src="https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg"
+                alt="${escapeHtml(video.title)}"
+                loading="lazy"
+                onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg';}"
+              />
+              <div class="badge">${index + 1}</div>
+            </div>
+
+            <div class="content">
+              <h2 class="title">${escapeHtml(video.title)}</h2>
+              <div class="meta">${video.download ? 'Kijken op YouTube of downloaden via Drive' : 'Alleen beschikbaar via YouTube'}</div>
+              <div class="actions">
+                <a class="btn btn-watch" href="${video.youtube}" target="_blank" rel="noopener noreferrer">Bekijken</a>
+                ${downloadButton}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      visibleCount.textContent = filtered.length;
+      emptyState.style.display = filtered.length ? 'none' : 'block';
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    searchInput.addEventListener('input', (e) => render(e.target.value));
+    render();
+  </script>
+</body>
+</html>
