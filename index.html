@@ -255,25 +255,38 @@
     button.thumb-wrap { border:0; padding:0; width:100%; cursor:pointer; font:inherit; color:inherit; background:#070b14; }
 
     /* ====== Player modal ====== */
-    .player { position:fixed; inset:0; z-index:100; display:none; align-items:center; justify-content:center; padding:clamp(12px,3vw,32px); }
+    .player {
+      position:fixed; inset:0; z-index:100; display:none;
+      align-items:center; justify-content:center;
+      padding:clamp(10px,3vw,32px);
+      padding-top:max(clamp(10px,3vw,32px), env(safe-area-inset-top));
+      padding-bottom:max(clamp(10px,3vw,32px), env(safe-area-inset-bottom));
+    }
     .player.open { display:flex; animation:viewIn .25s ease both; }
     .player-backdrop { position:absolute; inset:0; background:rgba(3,6,12,.82); backdrop-filter:blur(8px); }
     .player-box {
       position:relative; z-index:1; width:min(1100px,100%);
+      max-height:100%; display:flex; flex-direction:column;
       background:var(--surface); border:1px solid var(--border-strong);
       border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-glow);
     }
-    .player-bar { display:flex; align-items:center; gap:14px; padding:14px 16px; border-bottom:1px solid var(--border); }
+    .player-bar { flex:0 0 auto; display:flex; align-items:center; gap:14px; padding:14px 16px; border-bottom:1px solid var(--border); }
     .player-title { flex:1; font-weight:700; font-size:16px; letter-spacing:-.01em; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .player-close {
-      flex:0 0 auto; width:40px; height:40px; border-radius:50%; cursor:pointer;
+      flex:0 0 auto; width:44px; height:44px; border-radius:50%; cursor:pointer;
       display:flex; align-items:center; justify-content:center; color:#fff;
       background:rgba(255,255,255,.06); border:1px solid var(--border);
       transition:background .2s ease, border-color .2s ease, transform .2s ease;
     }
     .player-close:hover { background:rgba(56,189,248,.16); border-color:var(--brand-2); transform:rotate(90deg); }
     .player-close svg { width:20px; height:20px; }
-    .player-frame { aspect-ratio:16/9; background:#000; }
+    /* Frame past altijd binnen het scherm: aspect-ratio normaal, maar nooit hoger dan de ruimte. */
+    .player-frame {
+      flex:1 1 auto; min-height:0;
+      width:100%; aspect-ratio:16/9;
+      max-height:calc(100dvh - 130px);
+      background:#000;
+    }
     .player-frame iframe { width:100%; height:100%; border:0; display:block; }
 
     .footer-note { margin-top:28px; color:var(--muted-2); font-size:13px; text-align:center; }
