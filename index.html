@@ -324,7 +324,6 @@
 
       <section id="content" aria-live="polite"></section>
       <div id="emptyState" class="empty">Geen video's gevonden voor deze zoekopdracht.</div>
-      <div class="footer-note">Gemaakt door <b>Sjors Gofers</b></div>
     </div>
   </main>
 
@@ -351,7 +350,7 @@
        openbare Drive-map te laden. Maak een gratis sleutel aan in de
        Google Cloud Console (Drive API inschakelen) en plak hem hieronder.
        ========================================================= */
-    const DRIVE_API_KEY = "PLAK_HIER_JE_GOOGLE_API_SLEUTEL";
+    const DRIVE_API_KEY = "AIzaSyBaqptWldu0UAByBj7ZMZ1DFp8qQPwlwkk";
 
     /* =========================================================
        SHOWS — voeg hier een nieuwe show toe.
@@ -366,7 +365,7 @@
         title: "Masterclass 2026",
         date: "2026",
         subtitle: "Open direct de YouTube-video of download hem via Drive.",
-        cover: null,
+        cover: "1.png",
         videos: [
           { title: "MASTERCLASS 2026 - VOLLEDIGE SHOW", youtubeId: "TAD5on0Jd6g", download: null },
           { title: "Opening", youtubeId: "2vaY_YF-nUE", download: "https://drive.google.com/uc?export=download&id=1mbYRJGUUXMZn4z1iwNoeE4eQ7Xx2wCJc" },
@@ -406,7 +405,7 @@
         title: "Jungle - Eindshow 2026",
         date: "2026",
         subtitle: "De video's worden live uit Google Drive geladen. Klik om in de app af te spelen of te downloaden.",
-        cover: null,
+        cover: "2.png",
         dynamic: true,
         driveFolderId: "1wD2OM7l6FVGqLkazVCAg8iwy66eCLEKh",
         videos: null
@@ -493,9 +492,6 @@
           ? `<img src="${cover}" alt="${escapeHtml(show.title)}" loading="lazy" referrerpolicy="no-referrer"
                  onerror="${firstYt ? thumbFallback(firstYt.youtubeId) : "this.style.display='none'"}" />`
           : `<div class="cover-fallback">${show.dynamic ? '🌴' : '🎭'}</div>`;
-        const chip = show.dynamic
-          ? `<span class="show-chip live">📡 Live uit Drive</span>`
-          : (() => { const n = (show.videos || []).length; return `<span class="show-chip">🎬 ${n} ${n === 1 ? 'video' : "video's"}</span>`; })();
         return `
           <button class="show-card${show.dynamic ? ' dynamic' : ''}" style="animation-delay:${i*70}ms" onclick="openShow('${show.id}')" aria-label="Open ${escapeHtml(show.title)}">
             <div class="show-cover">
@@ -503,7 +499,6 @@
               <div class="play-fab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
             </div>
             <div class="show-overlay">
-              ${chip}
               <h2 class="show-title">${escapeHtml(show.title)}</h2>
               <p class="show-meta">📅 ${escapeHtml(show.date)}</p>
             </div>
